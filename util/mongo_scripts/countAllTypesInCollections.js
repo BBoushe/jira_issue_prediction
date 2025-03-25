@@ -2,7 +2,8 @@
 // load("countAllTypesInCollections.js");
 // Use above 2 in the mongosh shell
 
-const collections = ["Apache", "Hyperledger", "IntelDAOS", "JFrog", "Jira", "JiraEcosystem", "MariaDB", "Mindville", "Mojang", "MongoDB", "Qt", "RedHat", "Sakai", "SecondLife", "Sonatype", "Spring"];
+const collections = ["Apache", "Hyperledger", "IntelDAOS", "JFrog", "Jira", "JiraEcosystem", "MariaDB",
+  "Mindville", "Mojang", "MongoDB", "Qt", "RedHat", "Sakai", "SecondLife", "Sonatype", "Spring"];
 
 collections.forEach(function(col) {
   print("Collection: " + col);

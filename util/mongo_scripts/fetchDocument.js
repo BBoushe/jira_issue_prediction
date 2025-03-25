@@ -5,7 +5,7 @@
 // this returns a single random issue matching the $or restrictions and containing the defined fields.
 // change collectionName to existing collection name
 
-db.collectionName.findOne({
+const document = db.Jira.findOne({
   $or: [
     { "fields.components": { $exists: true, $ne: [] } },
     { "fields.labels": { $exists: true, $ne: [] } },
@@ -21,3 +21,5 @@ db.collectionName.findOne({
   "fields.status": 1,
   _id: 0
 });
+
+print(document);

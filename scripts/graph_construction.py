@@ -1,11 +1,14 @@
 import networkx as nx
+from tqdm import tqdm
 
 
 def attach_embeddings_to_graph(G, text_embedder):
     """
     For each node in graph, extract the text from raw_data and store an embedding in note attributes.
     """
-    for node in G.nodes():
+    nodes = list(G.nodes)
+
+    for node in tqdm(nodes, desc="Attaching embeddings to graph"):
         issue_doc = G.nodes[node].get("raw_data", {})
         embedding = text_embedder.encode_issue_text(issue_doc)
         # Store in the node data
@@ -31,7 +34,7 @@ class GraphBuilder:
         """
         G = nx.DiGraph()
 
-        for issue in issues:
+        for issue in tqdm(issues, desc="Building graph"):
             # Create a node for the issue, if not existing
             issue_id = self._extract_issue_id(issue)
             if issue_id is not None:

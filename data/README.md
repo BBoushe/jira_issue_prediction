@@ -4,6 +4,8 @@
 2. Extract it in this folder.
 3. enter `ThePublicJiraDataset/3.\ DataDump/` and verify integrity of dump, using the command below
 4. use the commands provided in the folders' README to restore the dump
+5. start the mongoDB server with `mongod --config /path/to/mongod.conf
+`
 
 ### Integrity 
 Check the integrity of the mongoDB dump using: 
