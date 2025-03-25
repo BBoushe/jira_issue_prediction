@@ -1,0 +1,12 @@
+# ThePublicJiraDataset will never be modified, therefore ignored
+data/ThePublicJiraDataset
+data/ThePublicJiraDataset.zip
+
+# Ignoring mongod local files
+data/var/
+
+# Mac related files
+.DS_Store
+
+# IDE related files
+.idea/
