@@ -17,4 +17,3 @@ collections.forEach(col => {
 });
 
 print(`Total count: ${totalCount}`);
-
