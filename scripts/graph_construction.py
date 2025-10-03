@@ -4,7 +4,7 @@ from tqdm import tqdm
 
 def attach_embeddings_to_graph(G, text_embedder):
     """
-    For each node in graph, extract the text from raw_data and store an embedding in note attributes.
+    For each node in graph, extract the text from raw_data and store an embedding in node attributes.
     """
     nodes = list(G.nodes)
 
@@ -24,13 +24,13 @@ class GraphBuilder:
         self.node_id_field = node_id_field
         self.link_type_field = link_type_field
 
-    def build_graph(self, issues, chosen_link_types=None):
+    def build_graph(self, issues, dependency_link_types=None):
         """
         Builds a directed graph (NetworkX) from the given issues.
 
         :param issues: list of dicts from Mongo
-        :param chosen_link_types: set or list of link types to include as edges.
-                           If None, include all link types found.
+        :param dependency_link_types: set or list of link types to treat as dependencies (label=1).
+                                      All other links are labeled as related (label=0).
         """
         G = nx.DiGraph()
 
@@ -47,8 +47,12 @@ class GraphBuilder:
 
                 for link_obj in links:
                     link_type = link_obj.get("type", {}).get("name")
-                    if chosen_link_types is not None and link_type not in chosen_link_types:
-                        continue
+                    
+                    # Label as 1 for dependency, 0 for related
+                    if dependency_link_types and link_type in dependency_link_types:
+                        edge_label = 1  # Dependency
+                    else:
+                        edge_label = 0  # Related
 
                     # Now figure out inward or outward
                     inward_issue = link_obj.get("inwardIssue")
@@ -60,7 +64,7 @@ class GraphBuilder:
                         dst = issue_id
                         if src and src != issue_id:
                             G.add_node(src)  # ensure node in graph
-                            G.add_edge(src, dst, link_type=link_type)
+                            G.add_edge(src, dst, label=edge_label)
 
                     # If there's an outward issue, the edge is from this issue->outward
                     if outward_issue:
@@ -68,7 +72,7 @@ class GraphBuilder:
                         dst = self._extract_issue_id(outward_issue)
                         if dst and dst != issue_id:
                             G.add_node(dst)  # ensure node in graph
-                            G.add_edge(src, dst, link_type=link_type)
+                            G.add_edge(src, dst, label=edge_label)
 
         return G
 
